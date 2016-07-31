@@ -12,7 +12,7 @@ public class ContactModificationTests extends TestBase {
   public void testContactModificationFromContactsList(){
     app.getNavigationHelper().gotoHomePage();
     app.getContactHelper().openEditForm();
-    app.getContactHelper().fillContactInfo(new ContactData("firstName", null, "lastName", null, null, null, "address", "homeTel", "mobileTel", "workTel", null, "email", null, null, null, null, null, null));
+    app.getContactHelper().fillContactInfo(new ContactData("firstName", null, "lastName", null, null, null, "address", "homeTel", "mobileTel", "workTel", null, "email", null, null, null, null ,null, null, null), false);
     app.getContactHelper().submitContactModification();
     app.getNavigationHelper().returnToHomePage();
   }
@@ -22,7 +22,7 @@ public class ContactModificationTests extends TestBase {
     app.getNavigationHelper().gotoHomePage();
     app.getContactHelper().openContactCard();
     app.getContactHelper().initContactModification();
-    app.getContactHelper().fillContactInfo(new ContactData("firstName", null, "lastName", null, null, null, "address", "homeTel", null, null, null, "email", "email2", "email3", null, null, null, null));
+    app.getContactHelper().fillContactInfo(new ContactData("firstName", null, "lastName", null, null, null, "address", "homeTel", null, null, null, "email", "email2", "email3", null, null, null, null, null), false);
     app.getContactHelper().submitContactModification();
     app.getNavigationHelper().returnToHomePage();
   }
