@@ -53,8 +53,7 @@ public class ContactHelper extends HelperBase {
 
     if (creation) {
       new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-    }
-    else {
+    } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")), "Добавлен элемент new_group на форму изменения контакта");
     }
   }
@@ -72,7 +71,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public void selectAllContacts() {
-    click(By.xpath("//input[@id='MassCB']"));
+    click(By.id("MassCB"));
   }
 
   public void deleteSelectedContacts() {
@@ -89,5 +88,15 @@ public class ContactHelper extends HelperBase {
 
   public void openContactCard() {
     click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[7]/a/img"));
+  }
+
+  public void createContact(ContactData contact) {
+    initContactCreation();
+    fillContactInfo(contact, true);
+    submitContactCreation();
+  }
+
+  public boolean isThereAContact() {
+    return isElementPresent(By.name("selected[]"));
   }
 }

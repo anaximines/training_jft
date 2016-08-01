@@ -10,15 +10,15 @@ import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
  */
 public class TestBase {
 
-    protected final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);
+  protected final ApplicationManager app = new ApplicationManager(BrowserType.CHROME);
 
-    @BeforeMethod
-    public void setUp() throws Exception {
-        app.init();
-    }
+  @BeforeMethod
+  public void setUp() throws Exception {
+    app.init();
+  }
 
-    @AfterMethod
-    public void tearDown() {
-        app.stop();
-    }
+  @AfterMethod
+  public void tearDown() {
+    app.stop();
+  }
 }
