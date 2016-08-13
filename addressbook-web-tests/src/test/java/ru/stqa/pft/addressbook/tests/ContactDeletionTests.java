@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
@@ -10,17 +11,20 @@ public class ContactDeletionTests extends TestBase {
 
   @Test
   public void testSelectedContactDeletion() {
-    app.getNavigationHelper().gotoHomePage();
 
+    app.getNavigationHelper().gotoHomePage();
     if (!app.getContactHelper().isThereAContact()) {
       app.getContactHelper().createContact(new ContactData("firstName", null, "lastName", null, null, null, "address", null, "mobileTel", null, null, "email", null, null, null, "test1", null, null, null));
     }
 
     app.timeout(5);
+    int before = app.getContactHelper().getContactCount();
     app.getContactHelper().selectContact();
     app.getContactHelper().deleteSelectedContacts();
     app.getContactHelper().submitContactsDeletion();
     app.getNavigationHelper().gotoHomePage();
+    int after = app.getContactHelper().getContactCount();
+    Assert.assertEquals(after, before - 1);
   }
 
   @Test
@@ -32,9 +36,12 @@ public class ContactDeletionTests extends TestBase {
     }
 
     app.timeout(5);
+    int before = app.getContactHelper().getContactCount();
     app.getContactHelper().openEditForm();
     app.getContactHelper().deleteContact();
     app.getNavigationHelper().gotoHomePage();
+    int after = app.getContactHelper().getContactCount();
+    Assert.assertEquals(after, before - 1);
   }
 
   @Test
@@ -47,9 +54,12 @@ public class ContactDeletionTests extends TestBase {
     }
 
     app.timeout(5);
+    int before = app.getContactHelper().getContactCount();
     app.getContactHelper().selectAllContacts();
     app.getContactHelper().deleteSelectedContacts();
     app.getContactHelper().submitContactsDeletion();
     app.getNavigationHelper().gotoHomePage();
+    int after = app.getContactHelper().getContactCount();
+    Assert.assertEquals(after, 0);
   }
 }
