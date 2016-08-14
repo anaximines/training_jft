@@ -4,26 +4,47 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
 public class ContactCreationTests extends TestBase {
 
   @Test
   public void testContactCreation() {
-    int before = app.getContactHelper().getContactCount();
-    app.getContactHelper().createContact(new ContactData("firstName", null, "lastName", null, null, null, "address", null, "mobileTel", null, null, "email", null, null, null, "test1", null, null, null));
+    List<ContactData> before = app.getContactHelper().getContactList();
+    ContactData contact = new ContactData("firstName", "lastName", "address", "mobileTel", "test1");
+    app.getContactHelper().createContact(contact);
     app.getNavigationHelper().returnToHomePage();
-    int after = app.getContactHelper().getContactCount();
-    Assert.assertEquals(after, before + 1);
+    List<ContactData> after = app.getContactHelper().getContactList();
+
+    before.add(contact);
+    Comparator <? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId);
+    after.sort(byId);
+    Assert.assertEquals(after,before);
   }
 
   @Test
   public void testNextContactCreation() {
-    int before = app.getContactHelper().getContactCount();
-    app.getContactHelper().createContact(new ContactData("firstName", null, "lastName", null, null, null, null, "homeTel", "mobileTel", null, null, "email", null, "email3", null, "test1", null, "secondaryHome", null));
+    List<ContactData> before = app.getContactHelper().getContactList();
+    ContactData contact1 = new ContactData("firstNameF", "lastNameF", null, "mobileTelF", "test1");
+    app.getContactHelper().createContact(contact1);
     app.getContactHelper().initNextContactCreation();
-    app.getContactHelper().fillContactInfo(new ContactData("firstName", null, "lastName", null, null, null, "address", "homeTel", "mobileTel", "workTel", null, "email", "email2", "email3", null, "[none]", null, "secondaryHome", null), true);
+    ContactData contact2 = new ContactData("firstNameS", "lastNameS", "addressS", "mobileTelS", "[none]");
+    app.getContactHelper().fillContactInfo(contact2, true);
     app.getContactHelper().submitContactCreation();
     app.getNavigationHelper().returnToHomePage();
-    int after = app.getContactHelper().getContactCount();
-    Assert.assertEquals(after, before + 2);
+    List<ContactData> after = app.getContactHelper().getContactList();
+
+    contact1.setId(contact2.getId() - 1);
+
+    before.add(contact1);
+    before.add(contact2);
+
+    Comparator <? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId);
+    after.sort(byId);
+    Assert.assertEquals(after,before);
   }
 }
