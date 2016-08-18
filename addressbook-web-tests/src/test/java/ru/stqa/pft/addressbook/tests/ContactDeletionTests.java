@@ -1,11 +1,11 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -13,70 +13,67 @@ import java.util.List;
  */
 public class ContactDeletionTests extends TestBase {
 
-  @Test
-  public void testSelectedContactDeletion() {
+    @BeforeMethod
+    public void ensurePreconditions() {
+        app.getNavigationHelper().gotoHomePage();
 
-    app.getNavigationHelper().gotoHomePage();
-    if (!app.getContactHelper().isThereAContact()) {
-      app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
+        if (!app.getContactHelper().isThereAContact()) {
+            app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
+            app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
+        }
+
+        app.timeout(5);
     }
 
-    app.timeout(5);
-    List<ContactData> before = app.getContactHelper().getContactList();
-    app.getContactHelper().selectContact(0);
-    app.getContactHelper().deleteSelectedContacts();
-    app.getContactHelper().submitContactsDeletion();
-    app.getNavigationHelper().gotoHomePage();
-    List<ContactData> after = app.getContactHelper().getContactList();
+    @Test
+    public void testSelectedContactDeletion() {
 
-    before.remove(0);
+        List<ContactData> before = app.getContactHelper().getContactList();
+        int index = 0;
 
-    Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId);
-    after.sort(byId);
-    Assert.assertEquals(after,before);
-  }
+        app.getContactHelper().selectContact(index);
+        app.getContactHelper().deleteSomeContacts();
 
-  @Test
-  public void testContactDeletion() {
-    app.getNavigationHelper().gotoHomePage();
+        List<ContactData> after = app.getContactHelper().getContactList();
 
-    if (!app.getContactHelper().isThereAContact()) {
-      app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
+        before.remove(index);
+
+        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+        before.sort(byId);
+        after.sort(byId);
+
+        Assert.assertEquals(after, before);
     }
 
-    app.timeout(5);
-    List<ContactData> before = app.getContactHelper().getContactList();
-    app.getContactHelper().openEditForm();
-    app.getContactHelper().deleteContact();
-    app.getNavigationHelper().gotoHomePage();
-    List<ContactData> after = app.getContactHelper().getContactList();
+    @Test
+    public void testContactDeletion() {
 
-    before.remove(0);
+        List<ContactData> before = app.getContactHelper().getContactList();
+        int index = 0;
 
-    Comparator <? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId);
-    after.sort(byId);
-    Assert.assertEquals(after,before);
-  }
+        app.getContactHelper().openEditForm();
+        app.getContactHelper().deleteContact();
+        app.timeout(5);
 
-  @Test
-  public void testAllContactsDeletion() {
-    app.getNavigationHelper().gotoHomePage();
+        List<ContactData> after = app.getContactHelper().getContactList();
 
-    if (!app.getContactHelper().isThereAContact()) {
-      app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
-      app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
+        before.remove(index);
+
+        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+        before.sort(byId);
+        after.sort(byId);
+
+        Assert.assertEquals(after, before);
     }
 
-    app.timeout(5);
-    List<ContactData> before = app.getContactHelper().getContactList();
-    Assert.assertNotEquals(before.size(), 0);
-    app.getContactHelper().selectAllContacts();
-    app.getContactHelper().deleteSelectedContacts();
-    app.getContactHelper().submitContactsDeletion();
-    app.getNavigationHelper().gotoHomePage();
-    List<ContactData> after = app.getContactHelper().getContactList();
-    Assert.assertEquals(after.size(), 0);
-  }
+    @Test
+    public void testAllContactsDeletion() {
+
+        app.getContactHelper().selectAllContacts();
+        app.getContactHelper().deleteSomeContacts();
+
+        List<ContactData> after = app.getContactHelper().getContactList();
+
+        Assert.assertEquals(after.size(), 0);
+    }
 }
