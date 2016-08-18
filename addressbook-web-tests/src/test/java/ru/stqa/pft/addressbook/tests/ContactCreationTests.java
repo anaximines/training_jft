@@ -11,11 +11,11 @@ public class ContactCreationTests extends TestBase {
 
     @Test
     public void testContactCreation() {
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         ContactData contact = new ContactData("firstName", "lastName", "address", "mobileTel", "test1");
-        app.getContactHelper().createContact(contact);
-        app.getContactHelper().returnToHomePage();
-        List<ContactData> after = app.getContactHelper().getContactList();
+        app.contact().create(contact);
+        app.contact().gotoToHomePage();
+        List<ContactData> after = app.contact().list();
 
         before.add(contact);
         Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
@@ -26,17 +26,17 @@ public class ContactCreationTests extends TestBase {
 
     @Test
     public void testNextContactCreation() {
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         ContactData contact1 = new ContactData("firstNameF", "lastNameF", null, "mobileTelF", "test1");
         ContactData contact2 = new ContactData("firstNameS", "lastNameS", "addressS", "mobileTelS", "[none]");
 
-        app.getContactHelper().createContact(contact1);
-        app.getContactHelper().initNextContactCreation();
-        app.getContactHelper().fillContactInfo(contact2, true);
-        app.getContactHelper().submitContactCreation();
-        app.getContactHelper().returnToHomePage();
+        app.contact().create(contact1);
+        app.contact().initNextCreation();
+        app.contact().fillInfo(contact2, true);
+        app.contact().submitCreation();
+        app.contact().gotoToHomePage();
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         contact1.setId(contact2.getId() - 1);
         before.add(contact1);

@@ -15,11 +15,11 @@ public class ContactDeletionTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
 
-        if (!app.getContactHelper().isThereAContact()) {
-            app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
-            app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
+        if (app.contact().list().size() == 0) {
+            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
+            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
         }
 
         app.timeout(5);
@@ -28,13 +28,13 @@ public class ContactDeletionTests extends TestBase {
     @Test
     public void testSelectedContactDeletion() {
 
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         int index = 0;
 
-        app.getContactHelper().selectContact(index);
-        app.getContactHelper().deleteSomeContacts();
+        app.contact().select(index);
+        app.contact().deleteSomeContacts();
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         before.remove(index);
 
@@ -48,14 +48,14 @@ public class ContactDeletionTests extends TestBase {
     @Test
     public void testContactDeletion() {
 
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         int index = 0;
 
-        app.getContactHelper().openEditForm();
-        app.getContactHelper().deleteContact();
+        app.contact().openEditForm();
+        app.contact().delete();
         app.timeout(5);
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         before.remove(index);
 
@@ -69,10 +69,10 @@ public class ContactDeletionTests extends TestBase {
     @Test
     public void testAllContactsDeletion() {
 
-        app.getContactHelper().selectAllContacts();
-        app.getContactHelper().deleteSomeContacts();
+        app.contact().selectAll();
+        app.contact().deleteSomeContacts();
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         Assert.assertEquals(after.size(), 0);
     }

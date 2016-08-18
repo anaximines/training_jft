@@ -24,10 +24,10 @@ public class ContactModificationTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
 
-        if (!app.getContactHelper().isThereAContact()) {
-            app.getContactHelper().createContact(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
+        if (app.contact().list().size() == 0) {
+            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
         }
 
         app.timeout(5);
@@ -35,15 +35,15 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModificationFromContactsList() {
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         int index = 0;
         ContactData contact = new ContactData(before.get(index).getId(), "firstName1", null, "address1", "mobileTel1", null);
         checkTestDataHasNull(contact, index, before);
 
-        app.getContactHelper().openEditForm();
-        app.getContactHelper().modifyContact(contact);
+        app.contact().openEditForm();
+        app.contact().modify(contact);
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         before.remove(index);
         before.add(contact);
@@ -57,16 +57,16 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModificationFromContactCard() {
-        List<ContactData> before = app.getContactHelper().getContactList();
+        List<ContactData> before = app.contact().list();
         int index = 0;
         ContactData contact = new ContactData(before.get(index).getId(), null, "lastName1", "address", null, null);
         checkTestDataHasNull(contact, index, before);
 
-        app.getContactHelper().openContactCard();
-        app.getContactHelper().initContactModification();
-        app.getContactHelper().modifyContact(contact);
+        app.contact().openCard();
+        app.contact().initModification();
+        app.contact().modify(contact);
 
-        List<ContactData> after = app.getContactHelper().getContactList();
+        List<ContactData> after = app.contact().list();
 
         before.remove(index);
         before.add(contact);
