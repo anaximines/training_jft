@@ -15,10 +15,10 @@ public class ContactModificationTests extends TestBase {
 
     public void checkTestDataHasNull(ContactData contact, int index, List<ContactData> before) {
         if (contact.getFirstName() == null) {
-            contact.setFirstName(before.get(index).getFirstName());
+            contact.withFirstName(before.get(index).getFirstName());
         }
         if (contact.getLastName() == null) {
-            contact.setLastName(before.get(index).getLastName());
+            contact.withLastName(before.get(index).getLastName());
         }
     }
 
@@ -27,7 +27,12 @@ public class ContactModificationTests extends TestBase {
         app.goTo().homePage();
 
         if (app.contact().list().size() == 0) {
-            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
+            app.contact().create(new ContactData().
+                    withFirstName("firstName").
+                    withLastName("lastName").
+                    withAddress("address").
+                    withMobileTel("mobileTel").
+                    withGroup("test1"));
         }
 
         app.timeout(5);
@@ -37,7 +42,11 @@ public class ContactModificationTests extends TestBase {
     public void testContactModificationFromContactsList() {
         List<ContactData> before = app.contact().list();
         int index = 0;
-        ContactData contact = new ContactData(before.get(index).getId(), "firstName1", null, "address1", "mobileTel1", null);
+        ContactData contact = new ContactData().
+                withId(before.get(index).getId()).
+                withFirstName("firstName1").
+                withAddress("address1").
+                withMobileTel("mobileTel1");
         checkTestDataHasNull(contact, index, before);
 
         app.contact().openEditForm();
@@ -59,7 +68,10 @@ public class ContactModificationTests extends TestBase {
     public void testContactModificationFromContactCard() {
         List<ContactData> before = app.contact().list();
         int index = 0;
-        ContactData contact = new ContactData(before.get(index).getId(), null, "lastName1", "address", null, null);
+        ContactData contact = new ContactData().
+                withId(before.get(index).getId()).
+                withLastName("lastName1").
+                withAddress("address");
         checkTestDataHasNull(contact, index, before);
 
         app.contact().openCard();

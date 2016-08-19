@@ -15,7 +15,7 @@ public class GroupModificationTests extends TestBase {
 
     public void checkTestDataHasNull(GroupData group, List<GroupData> before, int index) {
         if (group.getName() == null) {
-            group.setName(before.get(index).getName());
+            group.withName(before.get(index).getName());
         }
     }
 
@@ -24,7 +24,7 @@ public class GroupModificationTests extends TestBase {
         app.goTo().gotoGroupPage();
 
         if (app.group().list().size() == 0) {
-            app.group().create(new GroupData("test1", null, "test3"));
+            app.group().create(new GroupData().withName("test1").withFooter("test3"));
         }
     }
 
@@ -33,7 +33,7 @@ public class GroupModificationTests extends TestBase {
 
         List<GroupData> before = app.group().list();
         int index = 0;
-        GroupData group = new GroupData(before.get(index).getId(), null, "test2", "test3");
+        GroupData group = new GroupData().withId(before.get(index).getId()).withHeader("test2").withFooter("test3");
         checkTestDataHasNull(group, before, index);
 
         app.group().modify(index, group);

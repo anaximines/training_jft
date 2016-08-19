@@ -18,8 +18,18 @@ public class ContactDeletionTests extends TestBase {
         app.goTo().homePage();
 
         if (app.contact().list().size() == 0) {
-            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "test1"));
-            app.contact().create(new ContactData("firstName", "lastName", "address", "mobileTel", "[none]"));
+            app.contact().create(new ContactData().
+                    withFirstName("firstName").
+                    withLastName("lastName").
+                    withAddress("address").
+                    withMobileTel("mobileTel").
+                    withGroup("test1"));
+            app.contact().create(new ContactData().
+                    withFirstName("firstName").
+                    withLastName("lastName").
+                    withAddress("address").
+                    withMobileTel("mobileTel").
+                    withGroup("[none]"));
         }
 
         app.timeout(5);

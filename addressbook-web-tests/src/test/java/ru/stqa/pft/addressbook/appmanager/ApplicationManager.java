@@ -35,7 +35,7 @@ public class ApplicationManager {
     }
 
     timeout(0);
-    wd.get("http://localhost:8080/addressbook/");
+    wd.get("http://localhost/addressbook/");
     groupHelper = new GroupHelper(wd);
     contactHelper = new ContactHelper(wd);
     navigationHelper = new NavigationHelper(wd);

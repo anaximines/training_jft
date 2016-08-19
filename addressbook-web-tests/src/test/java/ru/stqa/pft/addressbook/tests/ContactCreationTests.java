@@ -12,7 +12,13 @@ public class ContactCreationTests extends TestBase {
     @Test
     public void testContactCreation() {
         List<ContactData> before = app.contact().list();
-        ContactData contact = new ContactData("firstName", "lastName", "address", "mobileTel", "test1");
+        ContactData contact = new ContactData().
+                withFirstName("firstName").
+                withLastName("lastName").
+                withAddress("address").
+                withMobileTel("mobileTel").
+                withGroup("test1");
+
         app.contact().create(contact);
         app.contact().gotoToHomePage();
         List<ContactData> after = app.contact().list();
@@ -27,8 +33,17 @@ public class ContactCreationTests extends TestBase {
     @Test
     public void testNextContactCreation() {
         List<ContactData> before = app.contact().list();
-        ContactData contact1 = new ContactData("firstNameF", "lastNameF", null, "mobileTelF", "test1");
-        ContactData contact2 = new ContactData("firstNameS", "lastNameS", "addressS", "mobileTelS", "[none]");
+        ContactData contact1 = new ContactData().
+                withFirstName("firstNameF").
+                withLastName("lastNameF").
+                withMobileTel("mobileTelF").
+                withGroup("test1");
+        ContactData contact2 = new ContactData().
+                withFirstName("firstNameS").
+                withLastName("lastNameS").
+                withAddress("addressS").
+                withMobileTel("mobileTelS").
+                withGroup("[none]");
 
         app.contact().create(contact1);
         app.contact().initNextCreation();
@@ -38,7 +53,7 @@ public class ContactCreationTests extends TestBase {
 
         List<ContactData> after = app.contact().list();
 
-        contact1.setId(contact2.getId() - 1);
+        contact1.withId(contact2.getId() - 1);
         before.add(contact1);
         before.add(contact2);
 
