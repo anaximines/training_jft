@@ -7,8 +7,9 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by akuzina on 25.07.2016.
@@ -53,12 +54,14 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("//div[@id='content']/form/input[21]"));
     }
 
-    public void openCard() {
-        click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[7]/a/img"));
+    public void openCard(ContactData contact) {
+        int id = contact.getId();
+        click(By.cssSelector("a[href='view.php?id="+id+"'] > img[title='Details']"));
     }
 
-    public void openEditForm() {
-        click(By.xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img"));
+    public void openEditForm(ContactData contact) {
+        int id = contact.getId();
+        click(By.cssSelector("a[href='edit.php?id="+id+"'] > img[title='Edit']"));
     }
 
     public void initModification() {
@@ -82,8 +85,9 @@ public class ContactHelper extends HelperBase {
         }
     }
 
-    public void select(int index) {
-        wd.findElements(By.name("selected[]")).get(index).click();
+    public void select(ContactData contact) {
+        int id = contact.getId();
+        wd.findElement(By.id(""+id+"")).click();
     }
 
     public void selectAll() {
@@ -106,8 +110,12 @@ public class ContactHelper extends HelperBase {
         return isElementPresent(By.name("selected[]"));
     }
 
-    public List<ContactData> list() {
-        List<ContactData> contacts = new ArrayList<>();
+    public int getContactCount() {
+        return wd.findElements(By.name("selected[]")).size();
+    }
+
+    public Set <ContactData> all() {
+        Set <ContactData> contacts = new HashSet<ContactData>();
         List<WebElement> elements = wd.findElements(By.name("entry"));
         for (WebElement element : elements) {
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));

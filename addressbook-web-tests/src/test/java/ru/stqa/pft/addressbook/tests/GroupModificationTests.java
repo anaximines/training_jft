@@ -5,17 +5,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by anaximines on 26/07/16.
  */
 public class GroupModificationTests extends TestBase {
 
-    public void checkTestDataHasNull(GroupData group, List<GroupData> before, int index) {
-        if (group.getName() == null) {
-            group.withName(before.get(index).getName());
+    public void checkTestDataHasNull(GroupData testData, GroupData modifiedGroup) {
+        if (testData.getName() == null) {
+            testData.withName(modifiedGroup.getName());
         }
     }
 
@@ -23,7 +22,7 @@ public class GroupModificationTests extends TestBase {
     public void ensurePreconditions() {
         app.goTo().gotoGroupPage();
 
-        if (app.group().list().size() == 0) {
+        if (app.group().all().size() == 0) {
             app.group().create(new GroupData().withName("test1").withFooter("test3"));
         }
     }
@@ -31,20 +30,16 @@ public class GroupModificationTests extends TestBase {
     @Test
     public void testGroupModification() {
 
-        List<GroupData> before = app.group().list();
-        int index = 0;
-        GroupData group = new GroupData().withId(before.get(index).getId()).withHeader("test2").withFooter("test3");
-        checkTestDataHasNull(group, before, index);
+        Set<GroupData> before = app.group().all();
+        GroupData modifiedGroup = before.iterator().next();
+        GroupData group = new GroupData().withId(modifiedGroup.getId()).withHeader("test2").withFooter("test3");
+        checkTestDataHasNull(group, modifiedGroup);
 
-        app.group().modify(index, group);
+        app.group().modify(group);
 
-        List<GroupData> after = app.group().list();
-        before.remove(index);
+        Set<GroupData> after = app.group().all();
+        before.remove(modifiedGroup);
         before.add(group);
-
-        Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
 
         Assert.assertEquals(after, before);
     }

@@ -4,14 +4,14 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContactCreationTests extends TestBase {
 
     @Test
     public void testContactCreation() {
-        List<ContactData> before = app.contact().list();
+        Set<ContactData> before = app.contact().all();
         ContactData contact = new ContactData().
                 withFirstName("firstName").
                 withLastName("lastName").
@@ -21,18 +21,16 @@ public class ContactCreationTests extends TestBase {
 
         app.contact().create(contact);
         app.contact().gotoToHomePage();
-        List<ContactData> after = app.contact().list();
+        Set<ContactData> after = app.contact().all();
 
+        contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
         before.add(contact);
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
         Assert.assertEquals(after, before);
     }
 
     @Test
     public void testNextContactCreation() {
-        List<ContactData> before = app.contact().list();
+        Set<ContactData> before = app.contact().all();
         ContactData contact1 = new ContactData().
                 withFirstName("firstNameF").
                 withLastName("lastNameF").
@@ -51,16 +49,21 @@ public class ContactCreationTests extends TestBase {
         app.contact().submitCreation();
         app.contact().gotoToHomePage();
 
-        List<ContactData> after = app.contact().list();
+        Set<ContactData> after = app.contact().all();
+        contact2.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
 
-        contact1.withId(contact2.getId() - 1);
+        Set<ContactData> afterWithoutLastContact = removeLastContact(contact2, after);
+        contact1.withId(afterWithoutLastContact.stream().mapToInt((g) -> g.getId()).max().getAsInt());
+
         before.add(contact1);
         before.add(contact2);
 
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
-
         Assert.assertEquals(after, before);
+    }
+
+    private Set<ContactData> removeLastContact(ContactData lastContact, Set<ContactData> set) {
+        Set<ContactData> setCopy = new HashSet<>(set);
+        setCopy.remove(lastContact);
+        return setCopy;
     }
 }

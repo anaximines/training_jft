@@ -5,20 +5,19 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by anaximines on 26/07/16.
  */
 public class ContactModificationTests extends TestBase {
 
-    public void checkTestDataHasNull(ContactData contact, int index, List<ContactData> before) {
-        if (contact.getFirstName() == null) {
-            contact.withFirstName(before.get(index).getFirstName());
+    public void checkTestDataHasNull(ContactData testData, ContactData modifiedContact) {
+        if (testData.getFirstName() == null) {
+            testData.withFirstName(modifiedContact.getFirstName());
         }
-        if (contact.getLastName() == null) {
-            contact.withLastName(before.get(index).getLastName());
+        if (testData.getLastName() == null) {
+            testData.withLastName(modifiedContact.getLastName());
         }
     }
 
@@ -26,7 +25,7 @@ public class ContactModificationTests extends TestBase {
     public void ensurePreconditions() {
         app.goTo().homePage();
 
-        if (app.contact().list().size() == 0) {
+        if (app.contact().all().size() == 0) {
             app.contact().create(new ContactData().
                     withFirstName("firstName").
                     withLastName("lastName").
@@ -40,52 +39,47 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModificationFromContactsList() {
-        List<ContactData> before = app.contact().list();
-        int index = 0;
+        Set<ContactData> before = app.contact().all();
+        ContactData modifiedContact = before.iterator().next();
+
         ContactData contact = new ContactData().
-                withId(before.get(index).getId()).
+                withId(modifiedContact.getId()).
                 withFirstName("firstName1").
                 withAddress("address1").
                 withMobileTel("mobileTel1");
-        checkTestDataHasNull(contact, index, before);
+        checkTestDataHasNull(contact, modifiedContact);
 
-        app.contact().openEditForm();
+
+        app.contact().openEditForm(modifiedContact);
         app.contact().modify(contact);
 
-        List<ContactData> after = app.contact().list();
+        Set<ContactData> after = app.contact().all();
 
-        before.remove(index);
+        before.remove(modifiedContact);
         before.add(contact);
-
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
 
         Assert.assertEquals(after, before);
     }
 
     @Test
     public void testContactModificationFromContactCard() {
-        List<ContactData> before = app.contact().list();
-        int index = 0;
+        Set<ContactData> before = app.contact().all();
+        ContactData modifiedContact = before.iterator().next();
+
         ContactData contact = new ContactData().
-                withId(before.get(index).getId()).
+                withId(modifiedContact.getId()).
                 withLastName("lastName1").
                 withAddress("address");
-        checkTestDataHasNull(contact, index, before);
+        checkTestDataHasNull(contact, modifiedContact);
 
-        app.contact().openCard();
+        app.contact().openCard(modifiedContact);
         app.contact().initModification();
         app.contact().modify(contact);
 
-        List<ContactData> after = app.contact().list();
+        Set<ContactData> after = app.contact().all();
 
-        before.remove(index);
+        before.remove(modifiedContact);
         before.add(contact);
-
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
 
         Assert.assertEquals(after, before);
     }
