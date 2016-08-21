@@ -53,8 +53,9 @@ public class ContactModificationTests extends TestBase {
         app.contact().openEditForm(modifiedContact);
         app.contact().modify(contact);
 
-        Contacts after = app.contact().all();
+        assertThat(app.contact().count(), equalTo(before.size()));
 
+        Contacts after = app.contact().all();
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 
@@ -73,8 +74,9 @@ public class ContactModificationTests extends TestBase {
         app.contact().initModification();
         app.contact().modify(contact);
 
+        assertThat(app.contact().count(), equalTo(before.size()));
+
         Contacts after = app.contact().all();
-        
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 }

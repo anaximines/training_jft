@@ -35,10 +35,11 @@ public class GroupModificationTests extends TestBase {
         GroupData modifiedGroup = before.iterator().next();
         GroupData group = new GroupData().withId(modifiedGroup.getId()).withHeader("test2").withFooter("test3");
         checkTestDataHasNull(group, modifiedGroup);
-
         app.group().modify(group);
-        Groups after = app.group().all();
 
+        assertThat(app.group().count(), equalTo(before.size()));
+
+        Groups after = app.group().all();
         assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
     }
 }
