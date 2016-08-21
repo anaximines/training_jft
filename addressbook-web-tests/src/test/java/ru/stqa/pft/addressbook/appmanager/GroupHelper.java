@@ -6,23 +6,23 @@ import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by akuzina on 25.07.2016.
  */
 public class GroupHelper extends HelperBase {
-
     public GroupHelper(WebDriver wd) {
         super(wd);
     }
+
+    private Groups groupsCache = null;
 
     public void create(GroupData group) {
         initGroupCreation();
         fillGroupForm(group);
         submitGroupCreation();
+        groupsCache = null;
         returnToGroupPage();
     }
 
@@ -31,12 +31,14 @@ public class GroupHelper extends HelperBase {
         initGroupModification();
         fillGroupForm(group);
         submitGroupModification();
+        groupsCache = null;
         returnToGroupPage();
     }
 
     public void delete(GroupData group) {
         selectGroupById(group.getId());
         deleteSelectedGroups();
+        groupsCache = null;
         returnToGroupPage();
     }
 
@@ -87,14 +89,17 @@ public class GroupHelper extends HelperBase {
     }
 
     public Groups all() {
-        Groups groups = new Groups();
+        if (groupsCache != null) {
+            return new Groups (groupsCache);
+        }
+        groupsCache = new Groups();
         List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
         for (WebElement element : elements) {
             String name = element.getText();
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
             GroupData group = new GroupData().withId(id).withName(name);
-            groups.add(group);
+            groupsCache.add(group);
         }
-        return groups;
+        return groupsCache;
     }
 }
