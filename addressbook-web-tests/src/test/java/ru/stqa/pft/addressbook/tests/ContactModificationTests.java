@@ -1,11 +1,12 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by anaximines on 26/07/16.
@@ -39,9 +40,9 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModificationFromContactsList() {
-        Set<ContactData> before = app.contact().all();
-        ContactData modifiedContact = before.iterator().next();
+        Contacts before = app.contact().all();
 
+        ContactData modifiedContact = before.iterator().next();
         ContactData contact = new ContactData().
                 withId(modifiedContact.getId()).
                 withFirstName("firstName1").
@@ -49,23 +50,19 @@ public class ContactModificationTests extends TestBase {
                 withMobileTel("mobileTel1");
         checkTestDataHasNull(contact, modifiedContact);
 
-
         app.contact().openEditForm(modifiedContact);
         app.contact().modify(contact);
 
-        Set<ContactData> after = app.contact().all();
+        Contacts after = app.contact().all();
 
-        before.remove(modifiedContact);
-        before.add(contact);
-
-        Assert.assertEquals(after, before);
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 
     @Test
     public void testContactModificationFromContactCard() {
-        Set<ContactData> before = app.contact().all();
-        ContactData modifiedContact = before.iterator().next();
+        Contacts before = app.contact().all();
 
+        ContactData modifiedContact = before.iterator().next();
         ContactData contact = new ContactData().
                 withId(modifiedContact.getId()).
                 withLastName("lastName1").
@@ -76,11 +73,8 @@ public class ContactModificationTests extends TestBase {
         app.contact().initModification();
         app.contact().modify(contact);
 
-        Set<ContactData> after = app.contact().all();
-
-        before.remove(modifiedContact);
-        before.add(contact);
-
-        Assert.assertEquals(after, before);
+        Contacts after = app.contact().all();
+        
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 }
