@@ -31,7 +31,7 @@ public class ContactModificationTests extends TestBase {
                     withFirstName("firstName").
                     withLastName("lastName").
                     withAddress("address").
-                    withMobileTel("mobileTel").
+                    withMobilePhone("mobileTel").
                     withGroup("test1"));
         }
 
@@ -47,7 +47,7 @@ public class ContactModificationTests extends TestBase {
                 withId(modifiedContact.getId()).
                 withFirstName("firstName1").
                 withAddress("address1").
-                withMobileTel("mobileTel1");
+                withMobilePhone("mobileTel1");
         checkTestDataHasNull(contact, modifiedContact);
 
         app.contact().openEditForm(modifiedContact);

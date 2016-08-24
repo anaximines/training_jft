@@ -11,7 +11,7 @@ public class GroupCreationTests extends TestBase {
 
     @Test
     public void testGroupCreation() {
-        app.goTo().gotoGroupPage();
+        app.goTo().groupPage();
         Groups before = app.group().all();
         GroupData group = new GroupData().withName("test1").withFooter("test3");
         app.group().create(group);
@@ -24,7 +24,7 @@ public class GroupCreationTests extends TestBase {
 
     @Test
     public void testBadGroupCreation() {
-        app.goTo().gotoGroupPage();
+        app.goTo().groupPage();
         Groups before = app.group().all();
         GroupData group = new GroupData().withName("test1").withFooter("test3'");
         app.group().create(group);

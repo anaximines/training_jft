@@ -16,7 +16,7 @@ public class ContactCreationTests extends TestBase {
                 withFirstName("firstName").
                 withLastName("lastName").
                 withAddress("address").
-                withMobileTel("mobileTel").
+                withMobilePhone("mobileTel").
                 withGroup("test1");
 
         app.contact().create(contact);
@@ -34,13 +34,13 @@ public class ContactCreationTests extends TestBase {
         ContactData contact1 = new ContactData().
                 withFirstName("firstNameF").
                 withLastName("lastNameF").
-                withMobileTel("mobileTelF").
+                withMobilePhone("mobileTelF").
                 withGroup("test1");
         ContactData contact2 = new ContactData().
                 withFirstName("firstNameS").
                 withLastName("lastNameS").
                 withAddress("addressS").
-                withMobileTel("mobileTelS").
+                withMobilePhone("mobileTelS").
                 withGroup("[none]");
 
         app.contact().create(contact1);
