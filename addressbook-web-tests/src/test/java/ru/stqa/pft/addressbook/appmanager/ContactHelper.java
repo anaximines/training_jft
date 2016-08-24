@@ -68,6 +68,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public ContactData infoFromEditForm(ContactData contact) {
+        openEditForm(contact);
         String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
         String lastname = wd.findElement(By.name("lastname")).getAttribute("value");
         String home = wd.findElement(By.name("home")).getAttribute("value");
