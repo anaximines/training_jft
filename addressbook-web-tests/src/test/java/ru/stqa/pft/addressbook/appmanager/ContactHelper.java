@@ -59,12 +59,19 @@ public class ContactHelper extends HelperBase {
 
     public void openCard(ContactData contact) {
         int id = contact.getId();
-        click(By.cssSelector("a[href='view.php?id="+id+"'] > img[title='Details']"));
+        click(By.cssSelector(String.format("a[href='view.php?id=%s'] > img[title='Details']", id)));
     }
 
     public void openEditForm(ContactData contact) {
         int id = contact.getId();
         click(By.cssSelector(String.format("a[href='edit.php?id=%s'] > img[title='Edit']", id)));
+    }
+
+    public ContactData infoFromCard(ContactData contact) {
+        openCard(contact);
+        String allDetails = wd.findElement(By.id("content")).getText();
+        wd.navigate().back();
+        return new ContactData().withId(contact.getId()).withAllDetails(allDetails);
     }
 
     public ContactData infoFromEditForm(ContactData contact) {
