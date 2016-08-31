@@ -32,16 +32,6 @@ public class ContactCreationTests extends TestBase {
     }
 
     @Test
-    public void testCurrentDir() {
-        File currentDir = new File("."); //определение текущей директории во время выполнения теста. "." - текущая директория
-        System.out.println(currentDir.getAbsolutePath()); //определение абсолютного пути к текущей директории
-        // убедимся, что файл действительно существует, перед запуском основных тестов:
-        File photo = new File("src/test/resources/geopic.png");
-        System.out.println(photo.getAbsolutePath());
-        System.out.println(photo.exists());
-    }
-
-    @Test
     public void testNextContactCreation() {
         Contacts before = app.contact().all();
         ContactData contact1 = new ContactData().
