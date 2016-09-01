@@ -14,3 +14,5 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea/workspace.xml
+addressbook-web-tests/src/test/resources/groups.csv
+addressbook-web-tests/src/test/resources/contacts.csv
