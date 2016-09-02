@@ -54,6 +54,7 @@ public class ContactCreationTests extends TestBase {
 
     @Test (dataProvider = "validContactsFromXml")
     public void testContactCreation(ContactData contact) {
+        app.goTo().homePage();
         File photo = new File("src/test/resources/geopic.png");
         Contacts before = app.contact().all();
         contact.withPhoto(photo);
@@ -68,6 +69,7 @@ public class ContactCreationTests extends TestBase {
 
     @Test (dataProvider = "validContactsFromJson")
     public void testNextContactCreation(ContactData contact1) {
+        app.goTo().homePage();
         Contacts before = app.contact().all();
         ContactData contact2 = new ContactData().
                 withFirstName("firstNameS").
