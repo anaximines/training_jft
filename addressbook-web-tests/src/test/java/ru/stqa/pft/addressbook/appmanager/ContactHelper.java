@@ -4,9 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.tests.ContactModificationTests;
+import ru.stqa.pft.addressbook.tests.TestBase;
 
 import java.util.List;
 
@@ -117,7 +120,10 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
         type(By.name("email2"), contactData.getEmail2());
         type(By.name("email3"), contactData.getEmail3());
-        attach(By.name("photo"), contactData.getPhoto());
+        try {attach(By.name("photo"), contactData.getPhoto());}
+        catch (NullPointerException npe){
+            LoggerFactory.getLogger(ContactHelper.class).info("Заполнение информации о контакте без добавления фото");
+        }
 
         if (creation) {
             if (contactData.getGroup() != null) {
