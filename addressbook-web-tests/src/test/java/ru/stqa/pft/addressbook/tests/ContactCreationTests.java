@@ -86,10 +86,9 @@ public class ContactCreationTests extends TestBase {
         assertThat(app.contact().count(), equalTo(before.size() + 2));
 
         Contacts after = app.db().contacts();
+
         contact2.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
-        //почему не работает присвоение id contact1 закомментированным способом?
-        contact1.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt() - 1);
-        //contact1.withId(after.without(contact2).stream().mapToInt((g) -> g.getId()).max().getAsInt());
+        contact1.withId(after.without(contact2).stream().mapToInt((g) -> g.getId()).max().getAsInt());
         assertThat(after, equalTo(before.withAdded(contact1).withAdded(contact2)));
     }
 }
