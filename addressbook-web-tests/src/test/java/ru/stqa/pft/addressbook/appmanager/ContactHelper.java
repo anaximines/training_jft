@@ -122,7 +122,7 @@ public class ContactHelper extends HelperBase {
         type(By.name("email3"), contactData.getEmail3());
         try {attach(By.name("photo"), contactData.getPhoto());}
         catch (NullPointerException npe){
-            LoggerFactory.getLogger(ContactHelper.class).info("Заполнение информации о контакте без добавления фото");
+            LoggerFactory.getLogger(ContactHelper.class).info("Заполнение информации о контакте без изменения поля \"фото\"");
         }
 
         if (creation) {

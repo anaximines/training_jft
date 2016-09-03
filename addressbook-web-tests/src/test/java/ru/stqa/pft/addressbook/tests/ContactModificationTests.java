@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
+import java.lang.reflect.Field;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -19,6 +21,27 @@ public class ContactModificationTests extends TestBase {
         }
         if (testData.getLastName() == null) {
             testData.withLastName(modifiedContact.getLastName());
+        }
+        if (testData.getAddress() == null) {
+            testData.withAddress(modifiedContact.getAddress());
+        }
+        if (testData.getWorkPhone() == null) {
+            testData.withWorkPhone(modifiedContact.getWorkPhone());
+        }
+        if (testData.getHomePhone() == null) {
+            testData.withHomePhone(modifiedContact.getHomePhone());
+        }
+        if (testData.getMobilePhone() == null) {
+            testData.withMobilePhone(modifiedContact.getMobilePhone());
+        }
+        if (testData.getEmail() == null) {
+            testData.withEmail(modifiedContact.getEmail());
+        }
+        if (testData.getEmail2() == null) {
+            testData.withEmail2(modifiedContact.getEmail2());
+        }
+        if (testData.getEmail3() == null) {
+            testData.withEmail3(modifiedContact.getEmail3());
         }
     }
 
@@ -59,7 +82,7 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModificationFromContactCard() {
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
 
         ContactData modifiedContact = before.iterator().next();
         ContactData contact = new ContactData().
@@ -74,7 +97,7 @@ public class ContactModificationTests extends TestBase {
 
         assertThat(app.contact().count(), equalTo(before.size()));
 
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
 }

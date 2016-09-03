@@ -56,27 +56,26 @@ public class ContactCreationTests extends TestBase {
     public void testContactCreation(ContactData contact) {
         app.goTo().homePage();
         File photo = new File("src/test/resources/geopic.png");
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         contact.withPhoto(photo);
         app.contact().create(contact);
         app.contact().gotoToHomePage();
 
         assertThat(app.contact().count(), equalTo(before.size() + 1));
 
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         assertThat(after, equalTo(before.withAdded(contact.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
     }
 
     @Test (dataProvider = "validContactsFromJson")
     public void testNextContactCreation(ContactData contact1) {
         app.goTo().homePage();
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         ContactData contact2 = new ContactData().
                 withFirstName("firstNameS").
                 withLastName("lastNameS").
                 withAddress("addressS").
-                withMobilePhone("mobileTelS").
-                withGroup("test1");
+                withMobilePhone("mobileTelS");
 
         app.contact().create(contact1);
         app.contact().initNextCreation();
@@ -86,10 +85,11 @@ public class ContactCreationTests extends TestBase {
 
         assertThat(app.contact().count(), equalTo(before.size() + 2));
 
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         contact2.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
-        contact1.withId(after.without(contact2).stream().mapToInt((g) -> g.getId()).max().getAsInt());
-
+        //почему не работает присвоение id contact1 закомментированным способом?
+        contact1.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt() - 1);
+        //contact1.withId(after.without(contact2).stream().mapToInt((g) -> g.getId()).max().getAsInt());
         assertThat(after, equalTo(before.withAdded(contact1).withAdded(contact2)));
     }
 }
