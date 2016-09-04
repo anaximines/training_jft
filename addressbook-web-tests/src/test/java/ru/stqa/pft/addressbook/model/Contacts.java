@@ -39,7 +39,7 @@ public class Contacts extends ForwardingSet<ContactData> {
         iterator.remove();
       }
     }
-    
+
     return contacts;
   }
 

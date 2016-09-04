@@ -129,27 +129,6 @@ public class ContactData {
     return allDetails;
   }
 
-  @Override
-  public String toString() {
-    return "ContactData{" +
-            "id=" + id +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", address='" + address + '\'' +
-            ", group='" + group + '\'' +
-            ", home='" + home + '\'' +
-            ", mobile='" + mobile + '\'' +
-            ", work='" + work + '\'' +
-            ", allPhones='" + allPhones + '\'' +
-            ", email='" + email + '\'' +
-            ", email2='" + email2 + '\'' +
-            ", email3='" + email3 + '\'' +
-            ", allEmails='" + allEmails + '\'' +
-            ", allDetails='" + allDetails + '\'' +
-            ", photo='" + photo + '\'' +
-            '}';
-  }
-
   public File getPhoto() {
     return new File(photo);
   }
@@ -266,5 +245,22 @@ public class ContactData {
     result = 31 * result + (email2 != null ? email2.hashCode() : 0);
     result = 31 * result + (email3 != null ? email3.hashCode() : 0);
     return result;
+  }
+
+
+  @Override
+  public String toString() {
+    return "ContactData{" +
+            "address='" + address + '\'' +
+            ", email2='" + email2 + '\'' +
+            ", email3='" + email3 + '\'' +
+            ", email='" + email + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", home='" + home + '\'' +
+            ", id=" + id +
+            ", lastName='" + lastName + '\'' +
+            ", mobile='" + mobile + '\'' +
+            ", work='" + work + '\'' +
+            '}';
   }
 }
