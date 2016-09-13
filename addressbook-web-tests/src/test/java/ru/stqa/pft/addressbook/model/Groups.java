@@ -2,10 +2,7 @@ package ru.stqa.pft.addressbook.model;
 
 import com.google.common.collect.ForwardingSet;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by anaximines on 21/08/16.
@@ -25,7 +22,7 @@ public class Groups extends ForwardingSet <GroupData> {
     this.delegate = new HashSet<GroupData>(groups);
   }
 
-    public Groups withAdded (GroupData group) {
+  public Groups withAdded (GroupData group) {
     Groups groups = new Groups(this);
     groups.add(group);
     return groups;
@@ -35,6 +32,46 @@ public class Groups extends ForwardingSet <GroupData> {
     Groups groups = new Groups(this);
     groups.remove(group);
     return groups;
+  }
+
+  public GroupData chooseRandomGroupFromDb() {
+    Groups groups = new Groups(this);
+    GroupData group = new GroupData();
+    int size = groups.size();
+    int item = new Random().nextInt(size);
+    int i = 0;
+    for(GroupData e : groups) {
+      if (i == item)
+        group = e;
+      i = i + 1;
+    }
+    return group;
+  }
+
+  public Boolean hasGroupId(Integer groupId) {
+    Groups groups = new Groups(this);
+    boolean hasGroupId = false;
+
+    Iterator<GroupData> iterator = groups.delegate.iterator();
+    while (iterator.hasNext()) {
+      if (iterator.next().getId() == groupId) {
+        hasGroupId = true;
+        break;
+        }
+    }
+    return hasGroupId;
+  }
+
+  public GroupData getGroupById(int groupId) {
+    Groups groups = new Groups(this);
+    GroupData group = null;
+    for (GroupData g : groups) {
+      if (g.getId() == groupId) {
+        group = g;
+        break;
+      }
+    }
+    return group;
   }
 
   @Override

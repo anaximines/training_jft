@@ -10,6 +10,7 @@
             <class name="ru.stqa.pft.addressbook.tests.ContactAddressTests"/>
             <class name="ru.stqa.pft.addressbook.tests.ContactPhoneTests"/>
             <class name="ru.stqa.pft.addressbook.tests.ContactEmailTests"/>
+            <class name="ru.stqa.pft.addressbook.tests.ContactInGroupsTests"/>
         </classes>
     </test>
 </suite>

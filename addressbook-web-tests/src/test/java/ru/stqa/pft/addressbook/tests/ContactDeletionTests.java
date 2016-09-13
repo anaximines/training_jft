@@ -22,14 +22,12 @@ public class ContactDeletionTests extends TestBase {
                     withFirstName("firstName").
                     withLastName("lastName").
                     withAddress("address").
-                    withMobilePhone("mobileTel").
-                    withGroup("test1"));
+                    withMobilePhone("mobileTel"));
             app.contact().create(new ContactData().
                     withFirstName("firstName").
                     withLastName("lastName").
                     withAddress("address").
-                    withMobilePhone("mobileTel").
-                    withGroup("[none]"));
+                    withMobilePhone("mobileTel"));
         }
 
         app.timeout(5);

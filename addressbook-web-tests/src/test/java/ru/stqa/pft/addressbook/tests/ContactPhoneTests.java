@@ -27,8 +27,7 @@ public class ContactPhoneTests extends TestBase {
               withMobilePhone("+78001112233").
               withWorkPhone("123-45-67").
               withEmail("email@mail.ru").
-              withEmail2("email@test.com").
-              withGroup("test1"));
+              withEmail2("email@test.com"));
     }
 
     app.timeout(5);

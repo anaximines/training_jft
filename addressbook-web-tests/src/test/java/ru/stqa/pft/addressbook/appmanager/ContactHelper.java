@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.tests.ContactModificationTests;
 import ru.stqa.pft.addressbook.tests.TestBase;
 
@@ -126,8 +127,10 @@ public class ContactHelper extends HelperBase {
         }
 
         if (creation) {
-            if (contactData.getGroup() != null) {
-                new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+            if (contactData.getGroups().size() > 0) {
+                Assert.assertTrue(contactData.getGroups().size() == 1);
+                new Select(wd.findElement(By.name("new_group"))).
+                        selectByValue(String.valueOf(contactData.getGroups().iterator().next().getId()));
             }
         } else {
             Assert.assertFalse(isElementPresent(By.name("new_group")), "Добавлен элемент new_group на форму изменения контакта");
@@ -137,6 +140,12 @@ public class ContactHelper extends HelperBase {
     public void select(ContactData contact) {
         int id = contact.getId();
         wd.findElement(By.id(""+id+"")).click();
+    }
+
+    public void addToGroup(GroupData group) {
+        int id = group.getId();
+        new Select(wd.findElement(By.name("to_group"))).selectByValue(String.valueOf(id));
+        click(By.name("add"));
     }
 
     public void selectAll() {
@@ -188,5 +197,14 @@ public class ContactHelper extends HelperBase {
             contactsCache.add(contact);
         }
         return contactsCache;
+    }
+
+    public void removeFromGroup() {
+        click(By.xpath("//div[@id='content']/form[2]/div[3]/input"));
+    }
+
+    public void openListByGroup(GroupData group) {
+        int id = group.getId();
+        new Select(wd.findElement(By.name("group"))).selectByValue(String.valueOf(id));
     }
 }

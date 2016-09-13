@@ -4,6 +4,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.lang.reflect.Field;
 
@@ -47,14 +49,22 @@ public class ContactModificationTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
+        if (app.db().groups().size() == 0) {
+            app.goTo().groupPage();
+            app.group().create(new GroupData().
+                    withName("group4testing"));
+            app.timeout(5);
+        }
+
         if (app.db().contacts().size() == 0) {
+            Groups groups = app.db().groups();
             app.goTo().homePage();
             app.contact().create(new ContactData().
                     withFirstName("firstName").
                     withLastName("lastName").
                     withAddress("address").
                     withMobilePhone("mobileTel").
-                    withGroup("test1"));
+                    inGroup(groups.iterator().next()));
         }
         app.timeout(5);
     }
@@ -71,6 +81,7 @@ public class ContactModificationTests extends TestBase {
                 withMobilePhone("mobileTel1");
         checkTestDataHasNull(contact, modifiedContact);
 
+        app.goTo().homePage();
         app.contact().openEditForm(modifiedContact);
         app.contact().modify(contact);
 
@@ -93,6 +104,7 @@ public class ContactModificationTests extends TestBase {
                 withAddress("address");
         checkTestDataHasNull(contact, modifiedContact);
 
+        app.goTo().homePage();
         app.contact().openCard(modifiedContact);
         app.contact().initModification();
         app.contact().modify(contact);

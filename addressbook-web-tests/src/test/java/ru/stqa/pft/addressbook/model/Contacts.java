@@ -3,7 +3,10 @@ package ru.stqa.pft.addressbook.model;
 import com.google.common.collect.ForwardingSet;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by anaximines on 21/08/16.
@@ -43,11 +46,6 @@ public class Contacts extends ForwardingSet<ContactData> {
     return contacts;
   }
 
-  @Override
-  protected Set<ContactData> delegate() {
-    return delegate;
-  }
-
   public static void setNullStringsAsEmpty(ContactData contact) {
 
     for (Field f : contact.getClass().getDeclaredFields()) {
@@ -67,5 +65,34 @@ public class Contacts extends ForwardingSet<ContactData> {
         throw new RuntimeException(e);
       }
     }
+  }
+
+  public ContactData getNewContactFromDb() {
+    Contacts contacts = new Contacts(this);
+    ContactData contact = new ContactData();
+    for (ContactData c : contacts) {
+      if (c.getId() == contacts.stream().mapToInt((g) -> g.getId()).max().getAsInt()) {
+        contact = c;
+        break;
+      }
+    }
+    return contact;
+  }
+
+  public ContactData getContactById(Integer contactId) {
+    Contacts contacts = new Contacts(this);
+    ContactData contact = new ContactData();
+    for (ContactData c : contacts) {
+      if (c.getId() == contactId) {
+        contact = c;
+        break;
+      }
+    }
+    return contact;
+  }
+
+  @Override
+  protected Set<ContactData> delegate() {
+    return delegate;
   }
 }
