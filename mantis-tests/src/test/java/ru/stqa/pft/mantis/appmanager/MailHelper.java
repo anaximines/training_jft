@@ -19,7 +19,6 @@ public class MailHelper {
 
   public MailHelper(ApplicationManager app) {
     this.app = app;
-    wiser = new Wiser(1025);
   }
 
   public List<MailMessage> waitForMail (int count, long timeout) throws MessagingException, IOException {
@@ -51,11 +50,11 @@ public class MailHelper {
   }
 
   public void start() {
+    wiser = new Wiser(1025);
     wiser.start();
   }
 
   public void stop() {
     wiser.stop();
-    wiser = new Wiser(1025);
   }
 }
