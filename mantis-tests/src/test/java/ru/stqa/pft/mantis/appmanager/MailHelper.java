@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  */
 public class MailHelper {
   private ApplicationManager app;
-  private final Wiser wiser;
+  private Wiser wiser;
 
   public MailHelper(ApplicationManager app) {
     this.app = app;
-    wiser = new Wiser();
+    wiser = new Wiser(1025);
   }
 
   public List<MailMessage> waitForMail (int count, long timeout) throws MessagingException, IOException {
@@ -51,11 +51,11 @@ public class MailHelper {
   }
 
   public void start() {
-    wiser.setPort(1025);
     wiser.start();
   }
 
   public void stop() {
     wiser.stop();
+    wiser = new Wiser(1025);
   }
 }
